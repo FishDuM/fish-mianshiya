@@ -237,6 +237,7 @@ public class QuestionController {
         }
         List<String> tags = questionEditRequest.getTags();
         if (tags != null) {
+
             question.setTags(JSONUtil.toJsonStr(tags));
         }
         // 操作数据库
