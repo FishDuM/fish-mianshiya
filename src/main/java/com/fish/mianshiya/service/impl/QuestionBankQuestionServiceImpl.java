@@ -9,11 +9,15 @@ import com.fish.mianshiya.constant.CommonConstant;
 import com.fish.mianshiya.exception.ThrowUtils;
 import com.fish.mianshiya.mapper.QuestionBankQuestionMapper;
 import com.fish.mianshiya.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
+import com.fish.mianshiya.model.entity.Question;
+import com.fish.mianshiya.model.entity.QuestionBank;
 import com.fish.mianshiya.model.entity.QuestionBankQuestion;
 import com.fish.mianshiya.model.entity.User;
 import com.fish.mianshiya.model.vo.QuestionBankQuestionVO;
 import com.fish.mianshiya.model.vo.UserVO;
 import com.fish.mianshiya.service.QuestionBankQuestionService;
+import com.fish.mianshiya.service.QuestionBankService;
+import com.fish.mianshiya.service.QuestionService;
 import com.fish.mianshiya.service.UserService;
 import com.fish.mianshiya.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +43,12 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     @Resource
     private UserService userService;
 
+    @Resource
+    private QuestionService questionService;
+
+    @Resource
+    private QuestionBankService questionBankService;
+
     /**
      * 校验数据
      *
@@ -51,18 +58,19 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
     @Override
     public void validQuestionBankQuestion(QuestionBankQuestion questionBankQuestion, boolean add) {
         ThrowUtils.throwIf(questionBankQuestion == null, ErrorCode.PARAMS_ERROR);
-        // todo 从对象中取值
-//        String title = questionBankQuestion.getTitle();
-//        // 创建数据时，参数不能为空
-//        if (add) {
-//            // todo 补充校验规则
-//            ThrowUtils.throwIf(StringUtils.isBlank(title), ErrorCode.PARAMS_ERROR);
-//        }
-//        // 修改数据时，有参数则校验
-//        // todo 补充校验规则
-//        if (StringUtils.isNotBlank(title)) {
-//            ThrowUtils.throwIf(title.length() > 80, ErrorCode.PARAMS_ERROR, "标题过长");
-//        }
+        // 从对象中取值
+        Long questionBankId = questionBankQuestion.getQuestionBankId();
+        Long questionId = questionBankQuestion.getQuestionId();
+
+        if (questionBankId != null){
+            QuestionBank questionBank = questionBankService.getById(questionBankId);
+            ThrowUtils.throwIf(questionBank == null, ErrorCode.NOT_FOUND_ERROR);
+        }
+
+        if (questionId != null){
+            Question question = questionService.getById(questionId);
+            ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
+        }
     }
 
     /**
