@@ -1,6 +1,10 @@
 package com.fish.mianshiya.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fish.mianshiya.annotation.AuthCheck;
 import com.fish.mianshiya.common.BaseResponse;
@@ -15,12 +19,15 @@ import com.fish.mianshiya.model.dto.question.QuestionEditRequest;
 import com.fish.mianshiya.model.dto.question.QuestionQueryRequest;
 import com.fish.mianshiya.model.dto.question.QuestionUpdateRequest;
 import com.fish.mianshiya.model.entity.Question;
+import com.fish.mianshiya.model.entity.QuestionBankQuestion;
 import com.fish.mianshiya.model.entity.User;
 import com.fish.mianshiya.model.vo.QuestionVO;
+import com.fish.mianshiya.service.QuestionBankQuestionService;
 import com.fish.mianshiya.service.QuestionService;
 import com.fish.mianshiya.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -43,6 +50,9 @@ public class QuestionController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private QuestionBankQuestionService questionBankQuestionService;
 
     // region 增删改查
 
@@ -157,11 +167,8 @@ public class QuestionController {
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
-        long current = questionQueryRequest.getCurrent();
-        long size = questionQueryRequest.getPageSize();
-        // 查询数据库
-        Page<Question> questionPage = questionService.page(new Page<>(current, size),
-                questionService.getQueryWrapper(questionQueryRequest));
+        ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
+        Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
         return ResultUtils.success(questionPage);
     }
 
