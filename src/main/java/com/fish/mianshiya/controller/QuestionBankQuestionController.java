@@ -1,5 +1,7 @@
 package com.fish.mianshiya.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fish.mianshiya.annotation.AuthCheck;
 import com.fish.mianshiya.common.BaseResponse;
@@ -11,6 +13,7 @@ import com.fish.mianshiya.exception.BusinessException;
 import com.fish.mianshiya.exception.ThrowUtils;
 import com.fish.mianshiya.model.dto.questionbankquestion.QuestionBankQuestionAddRequest;
 import com.fish.mianshiya.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
+import com.fish.mianshiya.model.dto.questionbankquestion.QuestionBankQuestionRemoveRequest;
 import com.fish.mianshiya.model.dto.questionbankquestion.QuestionBankQuestionUpdateRequest;
 import com.fish.mianshiya.model.entity.QuestionBankQuestion;
 import com.fish.mianshiya.model.entity.User;
@@ -94,6 +97,30 @@ public class QuestionBankQuestionController {
         boolean result = questionBankQuestionService.removeById(id);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * 移除题库题目关联
+     *
+     * @param questionBankQuestionRemoveRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/remove")
+    public BaseResponse<Boolean> removeQuestionBankQuestion(@RequestBody QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest, HttpServletRequest request) {
+        if (questionBankQuestionRemoveRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        Long questionBankId = questionBankQuestionRemoveRequest.getQuestionBankId();
+        Long questionId = questionBankQuestionRemoveRequest.getQuestionId();
+
+        LambdaQueryWrapper<QuestionBankQuestion> wrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class)
+                .eq(QuestionBankQuestion::getQuestionBankId, questionBankId)
+                .eq(QuestionBankQuestion::getQuestionId, questionId);
+
+        boolean remove = questionBankQuestionService.remove(wrapper);
+        return ResultUtils.success(remove);
     }
 
     /**
