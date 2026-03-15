@@ -2,12 +2,13 @@ package com.fish.mianshiya.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 import com.fish.mianshiya.model.dto.user.UserQueryRequest;
 import com.fish.mianshiya.model.entity.User;
 import com.fish.mianshiya.model.vo.LoginUserVO;
 import com.fish.mianshiya.model.vo.UserVO;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 
 /**

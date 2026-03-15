@@ -1,5 +1,6 @@
 package com.fish.mianshiya.controller;
 
+import com.fish.mianshiya.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fish.mianshiya.common.BaseResponse;
 import com.fish.mianshiya.common.ErrorCode;
@@ -14,7 +15,6 @@ import com.fish.mianshiya.model.entity.User;
 import com.fish.mianshiya.model.vo.PostVO;
 import com.fish.mianshiya.service.PostFavourService;
 import com.fish.mianshiya.service.PostService;
-import com.fish.mianshiya.service.UserService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

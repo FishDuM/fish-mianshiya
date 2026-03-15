@@ -2,10 +2,8 @@ package com.fish.mianshiya.controller;
 
 import com.fish.mianshiya.common.BaseResponse;
 import com.fish.mianshiya.common.ErrorCode;
-import com.fish.mianshiya.common.ResultUtils;
 import com.fish.mianshiya.exception.BusinessException;
 import com.fish.mianshiya.model.dto.postthumb.PostThumbAddRequest;
-import com.fish.mianshiya.model.entity.User;
 import com.fish.mianshiya.service.PostThumbService;
 import com.fish.mianshiya.service.UserService;
 import javax.annotation.Resource;
@@ -47,10 +45,11 @@ public class PostThumbController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能点赞
-        final User loginUser = userService.getLoginUser(request);
-        long postId = postThumbAddRequest.getPostId();
-        int result = postThumbService.doPostThumb(postId, loginUser);
-        return ResultUtils.success(result);
+//        final User loginUser = userService.getLoginUser(request);
+//        long postId = postThumbAddRequest.getPostId();
+//        int result = postThumbService.doPostThumb(postId, loginUser);
+//        return ResultUtils.success(result);
+        return null;
     }
 
 }
